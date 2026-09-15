@@ -16,6 +16,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base
 
 if TYPE_CHECKING:
+    from app.models.contrato import Contrato
+    from app.models.item import Item
     from app.models.orgao import Orgao
 
 
@@ -34,13 +36,11 @@ class Licitacao(Base):
             name="ck_licitacao_exercicio",
         ),
         CheckConstraint(
-            "situacao IN "
-            "('ABERTA', 'EM ANDAMENTO', 'HOMOLOGADA', 'CANCELADA')",
+            "situacao IN ('ABERTA', 'EM ANDAMENTO', 'HOMOLOGADA', 'CANCELADA')",
             name="ck_licitacao_situacao",
         ),
         CheckConstraint(
-            "data_encerramento IS NULL "
-            "OR data_encerramento >= data_inicio",
+            "data_encerramento IS NULL OR data_encerramento >= data_inicio",
             name="ck_licitacao_data_encerramento",
         ),
     )
@@ -88,4 +88,10 @@ class Licitacao(Base):
     )
     orgao: Mapped["Orgao"] = relationship(
         back_populates="licitacoes",
+    )
+    itens: Mapped[list["Item"]] = relationship(
+        back_populates="licitacao",
+    )
+    contratos: Mapped[list["Contrato"]] = relationship(
+        back_populates="licitacao",
     )
