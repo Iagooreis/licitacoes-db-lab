@@ -15,6 +15,7 @@ from app.models.base import Base
 if TYPE_CHECKING:
     from app.models.contrato import Contrato
     from app.models.item import Item
+    from app.models.item_pedido import ItemPedido
 
 
 class ItemContrato(Base):
@@ -67,5 +68,8 @@ class ItemContrato(Base):
         back_populates="itens",
     )
     item: Mapped["Item"] = relationship(
+        back_populates="item_contrato",
+    )
+    itens_pedido: Mapped[list["ItemPedido"]] = relationship(
         back_populates="item_contrato",
     )
