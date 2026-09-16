@@ -1,7 +1,7 @@
 from datetime import date
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Date, ForeignKey, Identity, String, func
+from sqlalchemy import Date, ForeignKey, Identity, Index, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base
@@ -13,6 +13,13 @@ if TYPE_CHECKING:
 
 class Pedido(Base):
     __tablename__ = "pedido"
+
+    __table_args__ = (
+        Index(
+            "idx_pedido_contrato",
+            "id_contrato",
+        ),
+    )
 
     id_pedido: Mapped[int] = mapped_column(
         Identity(),

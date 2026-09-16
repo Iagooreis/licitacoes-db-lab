@@ -5,6 +5,7 @@ from sqlalchemy import (
     CheckConstraint,
     ForeignKey,
     Identity,
+    Index,
     Numeric,
     String,
     Text,
@@ -30,6 +31,10 @@ class Item(Base):
         CheckConstraint(
             "valor_referencia >= 0",
             name="ck_item_valor_referencia",
+        ),
+        Index(
+            "idx_item_licitacao",
+            "id_licitacao",
         ),
     )
 

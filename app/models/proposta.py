@@ -34,6 +34,10 @@ class Proposta(Base):
             unique=True,
             postgresql_where=text("situacao = 'VENCEDORA'"),
         ),
+        Index(
+            "idx_proposta_fornecedor",
+            "id_fornecedor",
+        ),
     )
 
     id_item: Mapped[int] = mapped_column(

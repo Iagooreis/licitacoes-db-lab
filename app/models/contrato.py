@@ -6,6 +6,7 @@ from sqlalchemy import (
     Date,
     ForeignKey,
     Identity,
+    Index,
     String,
     UniqueConstraint,
 )
@@ -36,6 +37,10 @@ class Contrato(Base):
         CheckConstraint(
             "situacao IN ('ATIVO', 'ENCERRADO', 'CANCELADO')",
             name="ck_contrato_situacao",
+        ),
+        Index(
+            "idx_contrato_fornecedor",
+            "id_fornecedor",
         ),
     )
 

@@ -1,7 +1,7 @@
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from sqlalchemy import CheckConstraint, ForeignKey, Numeric
+from sqlalchemy import CheckConstraint, ForeignKey, Index, Numeric
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base
@@ -18,6 +18,10 @@ class ItemPedido(Base):
         CheckConstraint(
             "quantidade_pedida > 0",
             name="ck_item_pedido_quantidade",
+        ),
+        Index(
+            "idx_item_pedido_item_contrato",
+            "id_item_contrato",
         ),
     )
 
