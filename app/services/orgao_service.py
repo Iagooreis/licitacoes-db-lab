@@ -25,3 +25,6 @@ class OrgaoService:
         self.session.refresh(orgao)
 
         return orgao
+
+    def list_all(self) -> list[Orgao]:
+        return self.repository.list_all()

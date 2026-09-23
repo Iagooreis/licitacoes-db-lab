@@ -1,17 +1,15 @@
-from typing import Annotated
-
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from sqlalchemy import text
-from sqlalchemy.orm import Session
 
-from app.database import get_session
+from app.dependencies import SessionDep
+from app.routes import orgao_router
 
 app = FastAPI(
     title="API de Licitacoes",
     version="0.1.0",
 )
 
-SessionDep = Annotated[Session, Depends(get_session)]
+app.include_router(orgao_router)
 
 
 @app.get("/health", tags=["infraestrutura"])
