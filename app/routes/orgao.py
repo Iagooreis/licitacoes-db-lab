@@ -23,3 +23,13 @@ def create_orgao(
     service = OrgaoService(session)
 
     return service.create(data)
+
+
+@router.get(
+    "",
+    response_model=list[OrgaoResponse],
+)
+def list_orgaos(session: SessionDep) -> list[Orgao]:
+    service = OrgaoService(session)
+
+    return service.list_all()
