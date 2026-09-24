@@ -2,13 +2,14 @@ from fastapi import FastAPI
 from sqlalchemy import text
 
 from app.dependencies import SessionDep
-from app.routes import orgao_router
+from app.routes import fornecedor_router, orgao_router
 
 app = FastAPI(
     title="API de Licitacoes",
     version="0.1.0",
 )
 
+app.include_router(fornecedor_router)
 app.include_router(orgao_router)
 
 
