@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 
+from app.exceptions import CnpjAlreadyExistsError
 from app.models import Fornecedor
 from app.repositories import FornecedorRepository
 from app.schemas import FornecedorCreate
@@ -11,6 +12,9 @@ class FornecedorService:
         self.repository = FornecedorRepository(session)
 
     def create(self, data: FornecedorCreate) -> Fornecedor:
+        if self.repository.exists_by_cnpj(data.cnpj):
+            raise CnpjAlreadyExistsError(data.cnpj)
+
         fornecedor = Fornecedor(
             nome_fornecedor=data.nome_fornecedor,
             cnpj=data.cnpj,

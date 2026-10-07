@@ -1,6 +1,7 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, HTTPException, status
 
 from app.dependencies import SessionDep
+from app.exceptions import CnpjAlreadyExistsError
 from app.models import Fornecedor
 from app.schemas import FornecedorCreate, FornecedorResponse
 from app.services import FornecedorService
@@ -22,7 +23,13 @@ def create_fornecedor(
 ) -> Fornecedor:
     service = FornecedorService(session)
 
-    return service.create(data)
+    try:
+        return service.create(data)
+    except CnpjAlreadyExistsError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(error),
+        ) from error
 
 
 @router.get(

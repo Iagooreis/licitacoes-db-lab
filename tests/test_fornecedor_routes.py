@@ -62,3 +62,29 @@ def test_create_fornecedor_rejects_invalid_cnpj(
     )
 
     assert response.status_code == 422
+
+
+def test_create_fornecedor_rejects_duplicate_cnpj(
+    client: TestClient,
+) -> None:
+    payload = {
+        "nome_fornecedor": "Fornecedor duplicado",
+        "cnpj": "00000000000004",
+        "rua": "Rua Central",
+        "cidade": "Salvador",
+    }
+
+    first_response = client.post(
+        "/fornecedores",
+        json=payload,
+    )
+    second_response = client.post(
+        "/fornecedores",
+        json=payload,
+    )
+
+    assert first_response.status_code == 201
+    assert second_response.status_code == 409
+    assert second_response.json() == {
+        "detail": ("Fornecedor com CNPJ 00000000000004 ja cadastrado"),
+    }
