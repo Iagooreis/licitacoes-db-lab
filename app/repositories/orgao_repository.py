@@ -17,3 +17,6 @@ class OrgaoRepository:
         statement = select(Orgao).order_by(Orgao.id_orgao)
 
         return list(self.session.scalars(statement))
+
+    def get_by_id(self, id_orgao: int) -> Orgao | None:
+        return self.session.get(Orgao, id_orgao)

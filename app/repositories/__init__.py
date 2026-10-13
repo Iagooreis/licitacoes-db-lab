@@ -1,4 +1,5 @@
 from app.repositories.fornecedor_repository import FornecedorRepository
+from app.repositories.licitacao_repository import LicitacaoRepository
 from app.repositories.orgao_repository import OrgaoRepository
 
-__all__ = ["FornecedorRepository", "OrgaoRepository"]
+__all__ = ["FornecedorRepository", "LicitacaoRepository", "OrgaoRepository"]
