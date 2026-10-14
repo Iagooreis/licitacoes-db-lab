@@ -1,6 +1,10 @@
 from sqlalchemy.orm import Session
 
-from app.exceptions import LicitacaoNotFoundError, OrgaoNotFoundError
+from app.exceptions import (
+    LicitacaoAlreadyExistsError,
+    LicitacaoNotFoundError,
+    OrgaoNotFoundError,
+)
 from app.models import Licitacao
 from app.repositories import LicitacaoRepository, OrgaoRepository
 from app.schemas import LicitacaoCreate
@@ -15,6 +19,17 @@ class LicitacaoService:
     def create(self, data: LicitacaoCreate) -> Licitacao:
         if self.orgao_repository.get_by_id(data.id_orgao) is None:
             raise OrgaoNotFoundError(data.id_orgao)
+
+        if self.licitacao_repository.exists_by_orgao_numero_exercicio(
+            data.id_orgao,
+            data.numero,
+            data.exercicio,
+        ):
+            raise LicitacaoAlreadyExistsError(
+                data.id_orgao,
+                data.numero,
+                data.exercicio,
+            )
 
         licitacao = Licitacao(
             id_orgao=data.id_orgao,

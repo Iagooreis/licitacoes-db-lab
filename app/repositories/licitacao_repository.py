@@ -13,6 +13,24 @@ class LicitacaoRepository:
 
         return licitacao
 
+    def exists_by_orgao_numero_exercicio(
+        self,
+        id_orgao: int,
+        numero: str,
+        exercicio: int,
+    ) -> bool:
+        statement = (
+            select(Licitacao.id_licitacao)
+            .where(
+                Licitacao.id_orgao == id_orgao,
+                Licitacao.numero == numero,
+                Licitacao.exercicio == exercicio,
+            )
+            .limit(1)
+        )
+
+        return self.session.scalar(statement) is not None
+
     def list_all(self) -> list[Licitacao]:
         statement = select(Licitacao).order_by(Licitacao.id_licitacao)
 

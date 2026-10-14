@@ -99,3 +99,36 @@ def test_get_licitacao_returns_404_when_not_found(
     assert response.json() == {
         "detail": "Licitacao 999999999 nao encontrada",
     }
+
+
+def test_create_licitacao_rejects_duplicate(
+    client: TestClient,
+) -> None:
+    id_orgao = create_orgao(client)
+
+    payload = {
+        "id_orgao": id_orgao,
+        "numero": "903/2026",
+        "objeto": "Licitacao duplicada",
+        "exercicio": 2026,
+        "modalidade": "PREGAO",
+        "data_inicio": "2026-01-10",
+    }
+
+    first_response = client.post(
+        "/licitacoes",
+        json=payload,
+    )
+    second_response = client.post(
+        "/licitacoes",
+        json=payload,
+    )
+
+    assert first_response.status_code == 201
+    assert second_response.status_code == 409
+    assert second_response.json() == {
+        "detail": (
+            f"Licitacao numero 903/2026, exercicio 2026, "
+            f"ja cadastrada para o orgao {id_orgao}"
+        ),
+    }

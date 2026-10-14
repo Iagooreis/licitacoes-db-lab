@@ -1,7 +1,11 @@
 from fastapi import APIRouter, HTTPException, status
 
 from app.dependencies import SessionDep
-from app.exceptions import LicitacaoNotFoundError, OrgaoNotFoundError
+from app.exceptions import (
+    LicitacaoAlreadyExistsError,
+    LicitacaoNotFoundError,
+    OrgaoNotFoundError,
+)
 from app.models import Licitacao
 from app.schemas import LicitacaoCreate, LicitacaoResponse
 from app.services import LicitacaoService
@@ -28,6 +32,11 @@ def create_licitacao(
     except OrgaoNotFoundError as error:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(error),
+        ) from error
+    except LicitacaoAlreadyExistsError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
             detail=str(error),
         ) from error
 
